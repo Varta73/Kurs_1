@@ -4,8 +4,6 @@ import os
 import re
 from typing import Dict, List
 
-from src.utils import read_excel
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 path_1 = os.path.join(current_dir, "../logs/format.log")
 path_2 = os.path.abspath(path_1)
@@ -40,7 +38,7 @@ def simple_search(result: List[Dict], search: str) -> str:
         return ""
 
 
-# print(simple_search(read_excel(xlsx_path1), "Rumyanyj Khleb"))
+# print(simple_search(read_excel(xlsx_path1), "Фастфуд"))
 
 
 def search_by_phone_numbers(result: List[Dict]) -> str:

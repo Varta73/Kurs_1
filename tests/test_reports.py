@@ -45,5 +45,5 @@ def test_spending_by_category_no_transactions(sample_data):
     assert result.count("Продукты") == 0
 
 
-# if __name__ == "__main__":
-#     pytest.main()
+if __name__ == "__main__":
+    pytest.main()

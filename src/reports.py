@@ -58,4 +58,4 @@ def spending_by_category(df: pd.DataFrame, category: str, date: Optional[str] = 
     )
 
 
-print(spending_by_category(read_excel_df(xlsx_path1), "Фастфуд", "29.12.2021 16:43:00"))
+# print(spending_by_category(read_excel_df(xlsx_path1), "Фастфуд", "29.12.2021 16:43:00"))

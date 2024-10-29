@@ -4,6 +4,7 @@ import logging
 import os
 from typing import Any
 
+import urllib.request
 import pandas as pd
 import requests
 from dotenv import load_dotenv
@@ -12,7 +13,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 path_1 = os.path.join(current_dir, "../logs/format.log")
 path_2 = os.path.abspath(path_1)
 
-# Логгер, который записывает логи в файл.
+# Логер, который записывает логи в файл.
 logger = logging.getLogger("format")
 logger.setLevel(logging.DEBUG)
 file_handler = logging.FileHandler(path_2, "w", encoding="utf-8")
@@ -23,6 +24,10 @@ logger.addHandler(file_handler)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 xlsx_path = os.path.join(current_dir, "../data/operations.xlsx")
 xlsx_path1 = os.path.abspath(xlsx_path)
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+user_path = os.path.join(current_dir, "../data/user_setings.json")
+user_path1 = os.path.abspath(user_path)
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
@@ -125,34 +130,33 @@ def top_transaction(transaction: list) -> list:
 def currency_rates() -> list:
     """Функция выводит курс валют для необходимой валюты из пользовательских настроек"""
     logger.info("Получаем информацию из файла о необходимой валюте")
-    with open("../data/user_setings.json", "r") as file:
+    with open(user_path1, "r") as file:
         reading = json.load(file)["user_currencies"]
 
     currency_rate = []
     logger.info("Производим запрос по API по необходимым валютам")
     for i in reading:
-        url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={i}&amount=1"
+        url = f"https://v6.exchangerate-api.com/v6/{apikey}/latest/{i}"
 
-        headers = {"apikey": api_key}
+        response1 = requests.get(url)
+        body_dict = response1.json()
+        currency_rate.append({"Валюта": i, "Курс": round(body_dict["conversion_rates"]["RUB"], 2)})
 
-        response = requests.request("GET", url, headers=headers)
-        result = round(response.json()["result"], 2)
-        currency_rate.append(dict(Валюта=i, Курс=result))
     logger.info("Сбор информации по курсам валют закончен")
     return currency_rate
 
 
-print(currency_rates())
+# print(currency_rates())
 
 
 def cost_promotion() -> list:
     """Функция получает по API цену акций и выводит их стоимость"""
     logger.info("Получаем информацию из пользовательских настроек о необходимых акциях")
-    with open("../data/user_setings.json", "r") as file:
+    with open(user_path1, "r") as file:
         reading = json.load(file)["user_stocks"]
 
         logger.info("Производим запрос по API")
-        url = f"https://financialmodelingprep.com/api/v3/stock/list?apikey={apikey}"
+        url = f"https://financialmodelingprep.com/api/v3/stock/list?apikey={api_key}"
         response = requests.get(url)
 
         data = response.json()
