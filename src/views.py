@@ -54,4 +54,4 @@ def main(date: str) -> dict:
     return json.dumps(answer_dict, ensure_ascii=False, indent=4)
 
 
-print(main("2020-05-20 22:20:32"))
+# print(main("2020-05-20 22:20:32"))
