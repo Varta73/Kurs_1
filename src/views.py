@@ -5,12 +5,11 @@ import os
 
 from src.utils import cost_promotion, currency_rates, filter_cards, get_greeting, read_excel, top_transaction
 
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 path_1 = os.path.join(current_dir, "../logs/format.log")
 path_2 = os.path.abspath(path_1)
 
-# Логгер, который записывает логи в файл.
+# Логер, который записывает логи в файл.
 logger = logging.getLogger("format")
 logger.setLevel(logging.DEBUG)
 file_handler = logging.FileHandler(path_2, "w", encoding="utf-8")
@@ -23,7 +22,7 @@ def main(date: str) -> dict:
     """Функция сортирует транзакции за период и выводит словарь:
     Приветствие, транзакции, топ-5 операций, курс валют, стоимость акций"""
     logger.info("Начали обработку информации для страницы Главная")
-    date_obj = datetime.datetime.strptime(date, "%d-%m-%Y %H:%M:%S")
+    date_obj = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
     start_date = date_obj.replace(day=1, hour=0, minute=0, second=1)
 
     read_file = read_excel("../data/operations.xlsx")
@@ -55,4 +54,4 @@ def main(date: str) -> dict:
     return json.dumps(answer_dict, ensure_ascii=False, indent=4)
 
 
-print(main("20-05-2020 22:20:32"))
+# print(main("2020-05-20 22:20:32"))
